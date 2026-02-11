@@ -32,8 +32,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ t }) => {
     const fetchData = async () => {
       try {
         const [repoRes, releaseRes] = await Promise.allSettled([
-          fetch('https://api.github.com/repos/yeahhe365/All-Model-Chat'),
-          fetch('https://api.github.com/repos/yeahhe365/All-Model-Chat/releases/latest')
+          fetch('https://api.github.com/repos/Bsh54/My-AI-Front-'),
+          fetch('https://api.github.com/repos/Bsh54/My-AI-Front-/releases/latest')
         ]);
 
         if (repoRes.status === 'fulfilled' && repoRes.value.ok) {
@@ -86,9 +86,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ t }) => {
          <h3 className="text-3xl font-bold text-[var(--theme-text-primary)] tracking-tight">{t('about_title')}</h3>
          
          {/* Redesigned Version Pill */}
-         <a 
-            href="https://github.com/yeahhe365/All-Model-Chat/releases" 
-            target="_blank" 
+         <a
+            href="https://github.com/Bsh54/My-AI-Front-/releases"
+            target="_blank"
             rel="noopener noreferrer"
             className="group relative inline-flex items-center justify-center p-[1px] overflow-hidden rounded-full hover:scale-105 transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--theme-border-focus)] focus:ring-offset-[var(--theme-bg-primary)]"
             title={isUpdateAvailable ? `Update available: ${latestVersion}` : undefined}
@@ -132,9 +132,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ t }) => {
 
       {/* Actions */}
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
-        <a 
-          href="https://github.com/yeahhe365/All-Model-Chat" 
-          target="_blank" 
+        <a
+          href="https://github.com/Bsh54/My-AI-Front-"
+          target="_blank"
           rel="noopener noreferrer"
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 text-sm font-semibold text-white bg-[#24292F] hover:bg-[#24292F]/90 dark:bg-white dark:text-black dark:hover:bg-gray-200 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
         >
@@ -143,9 +143,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ t }) => {
         </a>
 
         {stars !== null && (
-             <a 
-             href="https://github.com/yeahhe365/All-Model-Chat/stargazers" 
-             target="_blank" 
+             <a
+             href="https://github.com/Bsh54/My-AI-Front-/stargazers"
+             target="_blank"
              rel="noopener noreferrer"
              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-[var(--theme-text-primary)] bg-[var(--theme-bg-input)] border border-[var(--theme-border-secondary)] hover:bg-[var(--theme-bg-tertiary)] hover:border-[var(--theme-border-focus)] rounded-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 group"
            >
