@@ -112,15 +112,7 @@ export const DEFAULT_APP_SETTINGS: AppSettings = {
   customShortcuts: {}, // Empty object implies using defaults
 };
 
-export const SUGGESTIONS_KEYS = [
-  { titleKey: 'suggestion_html_title', descKey: 'suggestion_html_desc', shortKey: 'suggestion_html_short', specialAction: 'organize', icon: 'AppWindow' },
-  { titleKey: 'suggestion_translate_title', descKey: 'suggestion_translate_desc', shortKey: 'suggestion_translate_short', icon: 'Languages' },
-  { titleKey: 'suggestion_ocr_title', descKey: 'suggestion_ocr_desc', shortKey: 'suggestion_ocr_short', icon: 'ScanText' }, 
-  { titleKey: 'suggestion_asr_title', descKey: 'suggestion_asr_desc', shortKey: 'suggestion_asr_short', icon: 'AudioWaveform' },
-  { titleKey: 'suggestion_srt_title', descKey: 'suggestion_srt_desc', shortKey: 'suggestion_srt_short', icon: 'Captions' },
-  { titleKey: 'suggestion_explain_title', descKey: 'suggestion_explain_desc', shortKey: 'suggestion_explain_short', icon: 'Lightbulb' },
-  { titleKey: 'suggestion_summarize_title', descKey: 'suggestion_summarize_desc', shortKey: 'suggestion_summarize_short', icon: 'FileText' },
-];
+export const SUGGESTIONS_KEYS = [];
 
 export const BBOX_SYSTEM_PROMPT = `**任务：** 请作为一位计算机视觉专家，对这张图片进行通用的目标检测，并利用Python代码生成可视化的标注结果。
 
