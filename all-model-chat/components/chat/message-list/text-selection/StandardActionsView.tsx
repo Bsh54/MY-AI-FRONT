@@ -74,19 +74,6 @@ export const StandardActionsView: React.FC<StandardActionsViewProps> = ({
                 <span>Search</span>
             </button>
 
-            {onTTS && (
-                <>
-                    <div className="w-px h-4 bg-[var(--theme-border-secondary)] mx-0.5" />
-                    <button
-                        onMouseDown={onTTS}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 hover:bg-[var(--theme-bg-tertiary)] rounded-full transition-all active:scale-95 text-xs font-medium text-[var(--theme-text-primary)]"
-                        title="Read Aloud (TTS)"
-                    >
-                        <Volume2 size={14} className="text-purple-500" />
-                        <span>TTS</span>
-                    </button>
-                </>
-            )}
         </>
     );
 };
