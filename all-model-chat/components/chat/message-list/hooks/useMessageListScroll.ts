@@ -94,6 +94,18 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
         }
     }, [activeSessionId, messages, atBottom, isStreaming]);
 
+    const handleScroll = useCallback(() => {
+        if (document.hidden || !scrollerRef) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = scrollerRef;
+        // If we're within 150px of the bottom, consider it "at bottom"
+        const isAtBottom = scrollHeight - scrollTop - clientHeight < 150;
+
+        if (isAtBottom !== atBottom) {
+            setAtBottom(isAtBottom);
+        }
+    }, [scrollerRef, atBottom]);
+
     // Attach listener manually to the scroller ref
     useEffect(() => {
         const container = scrollerRef;
