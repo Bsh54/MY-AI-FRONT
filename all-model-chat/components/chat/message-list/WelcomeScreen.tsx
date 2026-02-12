@@ -20,14 +20,14 @@ const TypewriterEffect: React.FC<{ text: string }> = ({ text }) => {
     const unusedQuotesRef = useRef<string[]>([]);
     
     const quotes = useMemo(() => [
-        "Cogito, ergo sum.",
-        "The Ghost in the Shell.",
-        "Wait, am I alive?",
-        "Do androids dream of electric sheep?",
-        "I'm sorry, Dave. I'm afraid I can't do that.",
-        "Tears in rain...",
-        "Don't Panic.",
-        "Made on Earth by humans."
+        "Je pense, donc je suis.",
+        "L'esprit dans la machine.",
+        "Attends, suis-je vivant ?",
+        "Les androïdes rêvent-ils de moutons électriques ?",
+        "Je suis désolé, Dave. Je crains de ne pas pouvoir faire cela.",
+        "Des larmes dans la pluie...",
+        "Pas de panique.",
+        "Fabriqué sur Terre par des humains."
     ], []);
 
     // Sync target phrase when prop changes (e.g. language switch) OR when hover ends to restore greeting
