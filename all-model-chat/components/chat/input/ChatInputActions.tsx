@@ -59,31 +59,6 @@ export const ChatInputActions: React.FC<ExtendedChatInputActionsProps> = ({
     <div className="flex items-center justify-between w-full">
         <div className="flex items-center gap-2">
             <AttachmentMenu onAction={onAttachmentAction} disabled={disabled} t={t as any} />
-            
-            {isNativeAudioModel && (
-                <WebSearchToggle 
-                    isGoogleSearchEnabled={isGoogleSearchEnabled} 
-                    onToggleGoogleSearch={onToggleGoogleSearch} 
-                    disabled={disabled} 
-                    t={t as any} 
-                />
-            )}
-
-            <ToolsMenu
-                isGoogleSearchEnabled={isGoogleSearchEnabled}
-                onToggleGoogleSearch={onToggleGoogleSearch}
-                isCodeExecutionEnabled={isCodeExecutionEnabled}
-                onToggleCodeExecution={onToggleCodeExecution}
-                isUrlContextEnabled={isUrlContextEnabled}
-                onToggleUrlContext={onToggleUrlContext}
-                isDeepSearchEnabled={isDeepSearchEnabled}
-                onToggleDeepSearch={onToggleDeepSearch}
-                onAddYouTubeVideo={onAddYouTubeVideo}
-                onCountTokens={onCountTokens}
-                disabled={disabled}
-                t={t as any}
-                isNativeAudioModel={isNativeAudioModel}
-            />
         </div>
 
         <div className="flex flex-shrink-0 items-center gap-2 sm:gap-3">

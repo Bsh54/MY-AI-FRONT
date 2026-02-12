@@ -61,137 +61,38 @@ export const useMessageListScroll = ({ messages, setScrollContainerRef, activeSe
         visibleRangeRef.current = { startIndex, endIndex };
     }, []);
 
-    // Handle New Turn: When a message is sent, ensure we stay at the bottom
+    // --- Logique de défilement collant ---
     useEffect(() => {
-        const sessionChanged = prevSessionIdForAnchor.current !== activeSessionId;
+        if (!activeSessionId || messages.length === 0) return;
 
-        if (sessionChanged) {
-            prevSessionIdForAnchor.current = activeSessionId;
+        // Cas 1 : On change de chat -> Saut immédiat en bas
+        if (lastRestoredSessionIdRef.current !== activeSessionId) {
+            lastRestoredSessionIdRef.current = activeSessionId;
             prevMsgCount.current = messages.length;
 
-            // Initial jump to bottom when switching sessions
-            if (messages.length > 0) {
-                setTimeout(() => {
-                    virtuosoRef.current?.scrollToIndex({
-                        index: messages.length - 1,
-                        align: 'end',
-                        behavior: 'auto'
-                    });
-                    setAtBottom(true);
-                }, 100);
-            }
+            setTimeout(() => {
+                virtuosoRef.current?.scrollToIndex({
+                    index: messages.length - 1,
+                    align: 'end',
+                    behavior: 'auto'
+                });
+                setAtBottom(true);
+            }, 100);
             return;
         }
 
-        // If new messages arrive and we were already at bottom, stay at bottom
-        if (messages.length > prevMsgCount.current && atBottom) {
-            virtuosoRef.current?.scrollToIndex({
-                index: messages.length - 1,
-                align: 'end',
-                behavior: 'smooth'
-            });
-        }
-
-        prevMsgCount.current = messages.length;
-    }, [messages, activeSessionId, atBottom]);
-
-    // Enhanced Navigation Logic: Search data array instead of DOM
-    const scrollToPrevTurn = useCallback(() => {
-        const currentStartIndex = visibleRangeRef.current.startIndex;
-        let targetIndex = -1;
-        
-        // Search backwards from currentStartIndex - 1 to find the start of the previous user message
-        for (let i = Math.max(0, currentStartIndex - 1); i >= 0; i--) {
-             if (messages[i].role === 'user') {
-                 targetIndex = i;
-                 break;
-             }
-        }
-        
-        if (targetIndex !== -1) {
-             lastScrollTarget.current = targetIndex;
-             virtuosoRef.current?.scrollToIndex({ index: targetIndex, align: 'start', behavior: 'smooth' });
-        } else {
-             virtuosoRef.current?.scrollToIndex({ index: 0, align: 'start', behavior: 'smooth' });
-        }
-    }, [messages]);
-
-    const scrollToNextTurn = useCallback(() => {
-        const currentStartIndex = visibleRangeRef.current.startIndex;
-        let targetIndex = -1;
-        
-        let startSearchIndex = currentStartIndex + 1;
-        
-        if (lastScrollTarget.current !== null && 
-            Math.abs(currentStartIndex - lastScrollTarget.current) <= 1) {
-             startSearchIndex = Math.max(startSearchIndex, lastScrollTarget.current + 1);
-        }
-        
-        for (let i = startSearchIndex; i < messages.length; i++) {
-             if (messages[i].role === 'user') {
-                 targetIndex = i;
-                 break;
-             }
-        }
-        
-        if (targetIndex !== -1) {
-             lastScrollTarget.current = targetIndex;
-             virtuosoRef.current?.scrollToIndex({ index: targetIndex, align: 'start', behavior: 'smooth' });
-        } else {
-             lastScrollTarget.current = messages.length - 1;
-             virtuosoRef.current?.scrollToIndex({ index: messages.length - 1, align: 'end', behavior: 'smooth' });
-        }
-    }, [messages]);
-
-    const handleScroll = useCallback(() => {
-        if (document.hidden) return;
-
-        const container = scrollerRef;
-        if (container) {
-            const { scrollTop, scrollHeight, clientHeight } = container;
-            const isAtBottom = scrollHeight - scrollTop - clientHeight < 150;
-            
-            if (isAtBottom !== atBottom) {
-                setAtBottom(isAtBottom);
+        // Cas 2 : Nouveaux messages ou texte qui s'écrit -> On suit si on est déjà en bas
+        if (messages.length > prevMsgCount.current || isStreaming) {
+            if (atBottom) {
+                virtuosoRef.current?.scrollToIndex({
+                    index: messages.length - 1,
+                    align: 'end',
+                    behavior: isStreaming ? 'auto' : 'smooth'
+                });
             }
-
-            // Save scroll position for active session
-            if (activeSessionId && lastRestoredSessionIdRef.current === activeSessionId && messages.length > 0) {
-                if (scrollSaveTimeoutRef.current) {
-                    clearTimeout(scrollSaveTimeoutRef.current);
-                }
-                scrollSaveTimeoutRef.current = window.setTimeout(() => {
-                    localStorage.setItem(`chat_scroll_pos_${activeSessionId}`, scrollTop.toString());
-                }, 300);
-            }
+            prevMsgCount.current = messages.length;
         }
-    }, [scrollerRef, atBottom, activeSessionId, messages.length]);
-
-    // Restore scroll position on session change
-    useEffect(() => {
-        if (!activeSessionId) return;
-
-        // Reset restoration state if we changed sessions
-        if (lastRestoredSessionIdRef.current !== activeSessionId) {
-             // If we have content, perform restoration
-             if (messages.length > 0) {
-                const savedPos = localStorage.getItem(`chat_scroll_pos_${activeSessionId}`);
-                
-                // Use setTimeout to allow Virtuoso to layout the items first
-                setTimeout(() => {
-                    if (savedPos !== null) {
-                        const top = parseInt(savedPos, 10);
-                        virtuosoRef.current?.scrollTo({ top });
-                    } else {
-                        // Default to bottom for new/unvisited sessions
-                        virtuosoRef.current?.scrollToIndex({ index: messages.length - 1, align: 'end' });
-                    }
-                    // Mark restoration as complete for this session ID
-                    lastRestoredSessionIdRef.current = activeSessionId;
-                }, 50);
-             }
-        }
-    }, [activeSessionId, messages.length]);
+    }, [activeSessionId, messages, atBottom, isStreaming]);
 
     // Attach listener manually to the scroller ref
     useEffect(() => {
