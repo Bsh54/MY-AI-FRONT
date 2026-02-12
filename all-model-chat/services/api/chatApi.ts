@@ -73,9 +73,6 @@ export const sendStatelessMessageStreamApi = async (
         });
 
         if (!response.ok) {
-            if (response.status === 429) {
-                throw new Error("QUOTA_EXCEEDED");
-            }
             throw new Error(`API Error: ${response.statusText}`);
         }
 
@@ -149,13 +146,6 @@ export const sendStatelessMessageNonStreamApi = async (
             }),
             signal: abortSignal
         });
-
-        if (!response.ok) {
-            if (response.status === 429) {
-                throw new Error("QUOTA_EXCEEDED");
-            }
-            throw new Error(`API Error: ${response.statusText}`);
-        }
 
         const json = await response.json();
         const content = json.choices?.[0]?.message?.content || "";

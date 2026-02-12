@@ -36,45 +36,40 @@ export const useApiErrorHandler = (updateAndPersistSessions: SessionsUpdater) =>
             return;
         }
 
-        let errorMessage = "An unknown error occurred.";
-        let isQuotaError = false;
-
+        let errorMessage = "Une erreur inconnue est survenue.";
         if (error instanceof Error) {
-            if (error.message.includes("QUOTA_EXCEEDED") || error.message.includes("429")) {
-                errorMessage = "Désolé, service indisponible pour le moment, réessayez dans quelques secondes.";
-                isQuotaError = true;
+            if (error.message.includes('429')) {
+                errorMessage = "Désolé, le service est indisponible pour le moment. Veuillez réessayer dans quelques secondes.";
+
+                // --- Logique de suppression automatique après 1 minute ---
+                setTimeout(() => {
+                    updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? {
+                        ...s,
+                        messages: s.messages.filter(msg => msg.id !== modelMessageId)
+                    } : s));
+                }, 60000); // 60 secondes
             } else {
                 errorMessage = error.name === 'SilentError'
-                    ? "API key is not configured in settings."
+                    ? "La clé API n'est pas configurée dans les paramètres."
                     : `${errorPrefix}: ${error.message}`;
             }
         } else {
             errorMessage = `${errorPrefix}: ${String(error)}`;
         }
 
-        updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? { ...s, messages: s.messages.map(msg =>
-            msg.id === modelMessageId
-                ? {
-                    ...msg,
-                    role: 'error',
-                    // Use the French message for quota errors, otherwise append
-                    content: isQuotaError ? errorMessage : (partialContent !== undefined ? partialContent : (msg.content || '')).trim() + `\n\n[${errorMessage}]`,
+        updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? { ...s, messages: s.messages.map(msg => 
+            msg.id === modelMessageId 
+                ? { 
+                    ...msg, 
+                    role: 'error', 
+                    // Use partial content if available, otherwise append to existing content
+                    content: (partialContent !== undefined ? partialContent : (msg.content || '')).trim() + `\n\n[${errorMessage}]`, 
                     thoughts: partialThoughts !== undefined ? partialThoughts : msg.thoughts,
-                    isLoading: false,
-                    generationEndTime: new Date()
-                  }
+                    isLoading: false, 
+                    generationEndTime: new Date() 
+                  } 
                 : msg
         )}: s));
-
-        // Auto-delete error message after 1 minute if it's a quota error
-        if (isQuotaError) {
-            setTimeout(() => {
-                updateAndPersistSessions(prev => prev.map(s => s.id === sessionId ? {
-                    ...s,
-                    messages: s.messages.filter(msg => msg.id !== modelMessageId)
-                } : s));
-            }, 60000);
-        }
     }, [updateAndPersistSessions]);
 
     return { handleApiError };
