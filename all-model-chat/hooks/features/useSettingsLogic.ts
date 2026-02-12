@@ -36,7 +36,7 @@ export const useSettingsLogic = ({
     const [activeTab, setActiveTab] = useState<SettingsTab>(() => {
         try {
             const saved = localStorage.getItem(SETTINGS_TAB_STORAGE_KEY);
-            const validTabs: SettingsTab[] = ['model', 'interface', 'data', 'shortcuts', 'about'];
+            const validTabs: SettingsTab[] = ['model', 'interface', 'data', 'about'];
             if (saved && validTabs.includes(saved as SettingsTab)) {
                 return saved as SettingsTab;
             }
@@ -184,7 +184,6 @@ export const useSettingsLogic = ({
         { id: 'model' as SettingsTab, labelKey: 'settingsTabModel', icon: IconModel },
         { id: 'interface' as SettingsTab, labelKey: 'settingsTabInterface', icon: IconInterface },
         { id: 'data' as SettingsTab, labelKey: 'settingsTabData', icon: IconData },
-        { id: 'shortcuts' as SettingsTab, labelKey: 'settingsTabShortcuts', icon: IconKeyboard },
         { id: 'about' as SettingsTab, labelKey: 'settingsTabAbout', icon: IconAbout },
     ], []);
 

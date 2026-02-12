@@ -123,15 +123,6 @@ export const SettingsContent: React.FC<SettingsContentProps> = ({
                     />
                 </div>
             )}
-            {activeTab === 'shortcuts' && ( 
-                <div className={animClass}>
-                    <ShortcutsSection 
-                        currentSettings={currentSettings}
-                        onUpdateSettings={handleBatchUpdate}
-                        t={t} 
-                    />
-                </div> 
-            )}
             {activeTab === 'about' && ( <div className={animClass}><AboutSection t={t} /></div> )}
         </div>
     );
