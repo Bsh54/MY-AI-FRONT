@@ -103,22 +103,6 @@ export const SettingsContent: React.FC<SettingsContentProps> = ({
                     />
                 </div>
             )}
-            {activeTab === 'account' && (
-                <div className={animClass}>
-                    <ApiConfigSection
-                        useCustomApiConfig={currentSettings.useCustomApiConfig}
-                        setUseCustomApiConfig={(val) => updateSetting('useCustomApiConfig', val)}
-                        apiKey={currentSettings.apiKey}
-                        setApiKey={(val) => updateSetting('apiKey', val)}
-                        apiProxyUrl={currentSettings.apiProxyUrl}
-                        setApiProxyUrl={(val) => updateSetting('apiProxyUrl', val)}
-                        useApiProxy={currentSettings.useApiProxy ?? false}
-                        setUseApiProxy={(val) => updateSetting('useApiProxy', val)}
-                        availableModels={availableModels}
-                        t={t as any}
-                    />
-                </div>
-            )}
             {activeTab === 'data' && (
                 <div className={animClass}>
                     <DataManagementSection
