@@ -228,23 +228,23 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
         </div>
       </div>
 
-      {/* MOBILE APP BAR - NAVIGATION FIXE AVEC CONTRASTE ÉLEVÉ */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--theme-bg-secondary)] border-t border-[var(--theme-border-primary)] z-[999] grid grid-cols-2 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+      {/* MOBILE APP BAR - STYLE FIXE HAUT CONTRASTE (INDÉPENDANT DU THÈME) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[#1a1a1a] border-t border-white/10 z-[999] grid grid-cols-2 items-center shadow-[0_-4px_20px_rgba(0,0,0,0.4)]">
         <button
           onClick={() => setActiveTab('opportunities')}
-          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'opportunities' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-primary)] opacity-60'}`}
+          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'opportunities' ? 'text-white' : 'text-white/40'}`}
         >
-          <Lightbulb className={`w-6 h-6 ${activeTab === 'opportunities' ? 'drop-shadow-[0_0_8px_var(--theme-text-accent)]' : ''}`} />
+          <Lightbulb className={`w-6 h-6 ${activeTab === 'opportunities' ? 'text-[#00ffcc] drop-shadow-[0_0_8px_rgba(0,255,204,0.5)]' : ''}`} />
           <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
-          {activeTab === 'opportunities' && <div className="absolute bottom-1 w-12 h-1 bg-[var(--theme-text-accent)] rounded-full" />}
+          {activeTab === 'opportunities' && <div className="absolute bottom-1 w-12 h-1 bg-[#00ffcc] rounded-full shadow-[0_0_10px_rgba(0,255,204,0.8)]" />}
         </button>
         <button
           onClick={() => setActiveTab('chat')}
-          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'chat' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-primary)] opacity-60'}`}
+          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 relative ${activeTab === 'chat' ? 'text-white' : 'text-white/40'}`}
         >
-          <MessageSquare className={`w-6 h-6 ${activeTab === 'chat' ? 'drop-shadow-[0_0_8px_var(--theme-text-accent)]' : ''}`} />
+          <MessageSquare className={`w-6 h-6 ${activeTab === 'chat' ? 'text-[#00ffcc] drop-shadow-[0_0_8px_rgba(0,255,204,0.5)]' : ''}`} />
           <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
-          {activeTab === 'chat' && <div className="absolute bottom-1 w-12 h-1 bg-[var(--theme-text-accent)] rounded-full" />}
+          {activeTab === 'chat' && <div className="absolute bottom-1 w-12 h-1 bg-[#00ffcc] rounded-full shadow-[0_0_10px_rgba(0,255,204,0.8)]" />}
         </button>
       </nav>
 
