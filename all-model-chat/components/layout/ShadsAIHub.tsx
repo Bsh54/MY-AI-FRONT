@@ -103,9 +103,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const otherOpps = OPPORTUNITIES_DATA.filter(o => filterType === 'Tous' || o.type === filterType);
 
   return (
-    <div className={`flex flex-col h-full w-full overflow-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] transition-colors duration-300`}>
+    <div className={`flex flex-col h-full w-full overflow-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] transition-colors duration-300 relative`}>
 
-      {/* HEADER NAV - DESKTOP ONLY */}
+      {/* HEADER DESKTOP */}
       <header className="hidden md:flex items-center justify-between px-6 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100] shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-[var(--theme-bg-accent)] rounded-xl flex items-center justify-center">
@@ -131,28 +131,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
         <div className="w-32"></div>
       </header>
 
-      {/* MOBILE APP BAR - ICONES SIMULTANÉES ET OPAQUE (HAUTEUR RÉDUITE POUR LE PROMPT) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-[var(--theme-bg-secondary)] border-t border-[var(--theme-border-primary)] z-[100] flex items-center">
-        <button
-          onClick={() => setActiveTab('opportunities')}
-          className={`flex-1 flex flex-col items-center justify-center h-full transition-colors ${activeTab === 'opportunities' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
-        >
-          <Lightbulb className="w-6 h-6" />
-          <span className="text-[10px] font-bold mt-0.5 uppercase tracking-tighter">Explorer</span>
-        </button>
-        <button
-          onClick={() => setActiveTab('chat')}
-          className={`flex-1 flex flex-col items-center justify-center h-full transition-colors ${activeTab === 'chat' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
-        >
-          <MessageSquare className="w-6 h-6" />
-          <span className="text-[10px] font-bold mt-0.5 uppercase tracking-tighter">Assistant</span>
-        </button>
-      </nav>
-
       <div className="flex-1 relative overflow-hidden">
-
-        {/* --- SECTION CHAT - CORRECTION SCROLL ET POSITION PROMPT --- */}
-        <div className={`absolute inset-0 flex pb-14 md:pb-0 ${activeTab === 'chat' ? 'flex z-10' : 'hidden'}`}>
+        {/* Contenu principal */}
+        <div className={`absolute inset-0 flex pb-16 md:pb-0 ${activeTab === 'chat' ? 'flex z-10' : 'hidden'}`}>
           {isHistorySidebarOpen && <div onClick={() => setIsHistorySidebarOpen(false)} className="fixed inset-0 bg-black/60 z-40 md:hidden" />}
           <HistorySidebar {...sidebarProps} />
           <div className="flex-1 flex flex-col min-w-0 h-full relative">
@@ -162,8 +143,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
           <AppModals {...appModalsProps} />
         </div>
 
-        {/* --- SECTION OPPORTUNITIES --- */}
-        <div className={`absolute inset-0 overflow-y-auto bg-[var(--theme-bg-primary)] pb-14 md:pb-0 ${activeTab === 'opportunities' ? 'block z-20' : 'hidden'}`}>
+        <div className={`absolute inset-0 overflow-y-auto bg-[var(--theme-bg-primary)] pb-16 md:pb-0 ${activeTab === 'opportunities' ? 'block z-20' : 'hidden'}`}>
           <div className="max-w-7xl mx-auto p-6 md:p-12 space-y-12">
             {!selectedOpp ? (
               <>
@@ -184,7 +164,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                       <div className="h-64 relative overflow-hidden">
                         <img src={opp.image} className="w-full h-full object-cover transition-transform duration-700 scale-100 group-hover:scale-110" />
                         <div className="absolute top-6 left-6 flex flex-col gap-2">
-                           <span className="bg-black/50 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">{opp.type}</span>
+                           <span className="bg-black/50 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-white/20">{opp.type}</span>
                         </div>
                       </div>
                       <div className="p-8 flex-1 flex flex-col justify-between space-y-6">
@@ -212,11 +192,10 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-8 md:px-12 mt-10 space-y-4">
-                  <span className="bg-[var(--theme-bg-accent)] text-white px-5 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest inline-block">{selectedOpp.type}</span>
+                  <span className="bg-[var(--theme-bg-accent)] text-white px-5 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest inline-block shadow-lg">{selectedOpp.type}</span>
                   <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-[var(--theme-text-primary)]">{selectedOpp.title}</h1>
                 </div>
 
-                {/* GRILLE 50/50 - ACTIONS ÉLARGIES ET SANS BOX (UNBOXING) */}
                 <div className="max-w-7xl mx-auto px-8 md:px-12 mt-12 grid grid-cols-1 lg:grid-cols-2 gap-16">
                   <div className="space-y-10">
                     <div className="prose prose-invert text-[var(--theme-text-secondary)] text-xl leading-relaxed max-w-none">
@@ -236,7 +215,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                           const message = `Je suis intéressé par "${selectedOpp.title}" de ${selectedOpp.organization}. Aide-moi à postuler.`;
                           if (chatAreaProps.onSendMessage) { chatAreaProps.onSendMessage(message); setActiveTab('chat'); }
                         }}
-                        className="w-full bg-transparent border-4 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-8 rounded-[2.5rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-4 group text-2xl uppercase tracking-tighter shadow-lg"
+                        className="w-full bg-transparent border-4 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-8 rounded-[2.5rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-4 group text-2xl uppercase tracking-tighter"
                       >
                         PRÉPARER AVEC L'IA <Sparkles className="w-8 h-8 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
@@ -249,8 +228,24 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
         </div>
       </div>
 
-      {/* FOOTER VIDE */}
-      <footer className="md:hidden h-14 bg-[var(--theme-bg-secondary)] border-t border-[var(--theme-border-primary)]"></footer>
+      {/* MOBILE APP BAR - POSITIONNÉ À LA FIN POUR ÊTRE AU-DESSUS DE TOUT */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--theme-bg-secondary)] border-t border-[var(--theme-border-primary)] z-[999] grid grid-cols-2 items-center shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
+        <button
+          onClick={() => setActiveTab('opportunities')}
+          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 ${activeTab === 'opportunities' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
+        >
+          <Lightbulb className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Explorer</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('chat')}
+          className={`h-full flex flex-col items-center justify-center transition-all active:scale-95 ${activeTab === 'chat' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
+        >
+          <MessageSquare className="w-6 h-6" />
+          <span className="text-[10px] font-black mt-1 uppercase tracking-wider">Assistant</span>
+        </button>
+      </nav>
+
     </div>
   );
 };
