@@ -6,13 +6,6 @@ import {
   ChevronLeft,
   Sparkles,
   Clock,
-  MapPin,
-  Globe,
-  Star,
-  Zap,
-  Bell,
-  CheckCircle2,
-  Users
 } from 'lucide-react';
 
 // Imports des composants originaux
@@ -44,7 +37,7 @@ interface Opportunity {
   location: string;
   image: string;
   status: 'Ouvert' | 'Bientôt fini' | 'Fermé';
-  reward?: string; // Montant ou prix
+  reward?: string;
   featured?: boolean;
 }
 
@@ -138,41 +131,44 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
         <div className="w-32"></div>
       </header>
 
-      {/* MOBILE APP BAR - TOUTES LES ICONES SIMULTANÉMENT ET OPAQUE */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-[var(--theme-bg-secondary)] border-t border-[var(--theme-border-primary)] z-[100] flex items-center">
+      {/* MOBILE APP BAR - ICONES SIMULTANÉES ET OPAQUE (HAUTEUR RÉDUITE POUR LE PROMPT) */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-[var(--theme-bg-secondary)] border-t border-[var(--theme-border-primary)] z-[100] flex items-center">
         <button
           onClick={() => setActiveTab('opportunities')}
-          className={`flex-1 flex flex-col items-center justify-center h-full ${activeTab === 'opportunities' ? 'text-[var(--theme-bg-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
+          className={`flex-1 flex flex-col items-center justify-center h-full transition-colors ${activeTab === 'opportunities' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
         >
           <Lightbulb className="w-6 h-6" />
-          <span className="text-[10px] font-bold mt-1 uppercase tracking-tighter">Explorer</span>
+          <span className="text-[10px] font-bold mt-0.5 uppercase tracking-tighter">Explorer</span>
         </button>
         <button
           onClick={() => setActiveTab('chat')}
-          className={`flex-1 flex flex-col items-center justify-center h-full ${activeTab === 'chat' ? 'text-[var(--theme-bg-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
+          className={`flex-1 flex flex-col items-center justify-center h-full transition-colors ${activeTab === 'chat' ? 'text-[var(--theme-text-accent)]' : 'text-[var(--theme-text-secondary)]'}`}
         >
           <MessageSquare className="w-6 h-6" />
-          <span className="text-[10px] font-bold mt-1 uppercase tracking-tighter">Assistant</span>
+          <span className="text-[10px] font-bold mt-0.5 uppercase tracking-tighter">Assistant</span>
         </button>
       </nav>
 
       <div className="flex-1 relative overflow-hidden">
-        {/* SECTION CHAT */}
-        <div className={`absolute inset-0 flex pb-16 md:pb-0 ${activeTab === 'chat' ? 'block z-10' : 'hidden'}`}>
+
+        {/* --- SECTION CHAT - CORRECTION SCROLL ET POSITION PROMPT --- */}
+        <div className={`absolute inset-0 flex pb-14 md:pb-0 ${activeTab === 'chat' ? 'flex z-10' : 'hidden'}`}>
           {isHistorySidebarOpen && <div onClick={() => setIsHistorySidebarOpen(false)} className="fixed inset-0 bg-black/60 z-40 md:hidden" />}
           <HistorySidebar {...sidebarProps} />
-          <ChatArea {...chatAreaProps} />
+          <div className="flex-1 flex flex-col min-w-0 h-full relative">
+            <ChatArea {...chatAreaProps} />
+          </div>
           {sidePanelContent && <SidePanel content={sidePanelContent} onClose={onCloseSidePanel} themeId={themeId} />}
           <AppModals {...appModalsProps} />
         </div>
 
-        {/* SECTION OPPORTUNITIES */}
-        <div className={`absolute inset-0 overflow-y-auto bg-[var(--theme-bg-primary)] pb-16 md:pb-0 ${activeTab === 'opportunities' ? 'block z-20' : 'hidden'}`}>
+        {/* --- SECTION OPPORTUNITIES --- */}
+        <div className={`absolute inset-0 overflow-y-auto bg-[var(--theme-bg-primary)] pb-14 md:pb-0 ${activeTab === 'opportunities' ? 'block z-20' : 'hidden'}`}>
           <div className="max-w-7xl mx-auto p-6 md:p-12 space-y-12">
             {!selectedOpp ? (
               <>
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-[var(--theme-border-primary)] pb-8">
-                  <h3 className="text-3xl font-black">OPPORTUNITIES BOARD</h3>
+                  <h3 className="text-3xl font-black uppercase tracking-tight text-[var(--theme-text-primary)]">Opportunities Board</h3>
                   <div className="flex flex-wrap gap-2 p-1.5 bg-[var(--theme-bg-secondary)] rounded-2xl border border-[var(--theme-border-primary)]">
                     {['Tous', 'Bourse', 'Concours', 'Stage', 'Mentorat', 'Conférence'].map(t => (
                       <button key={t} onClick={() => setFilterType(t)} className={`px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${filterType === t ? 'bg-[var(--theme-bg-accent)] text-[var(--theme-text-accent)] shadow-lg' : 'text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)]'}`}>
@@ -194,7 +190,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                       <div className="p-8 flex-1 flex flex-col justify-between space-y-6">
                         <div className="space-y-4">
                           <p className="text-[var(--theme-bg-accent)] text-[10px] font-black uppercase tracking-[0.2em]">{opp.organization}</p>
-                          <h4 className="text-2xl font-bold leading-tight group-hover:text-[var(--theme-text-link)] transition-colors">{opp.title}</h4>
+                          <h4 className="text-2xl font-bold leading-tight group-hover:text-[var(--theme-text-link)] transition-colors line-clamp-2">{opp.title}</h4>
                         </div>
                         <div className="flex items-center justify-between pt-6 border-t border-[var(--theme-border-primary)]">
                           <div className="flex items-center gap-2 text-[var(--theme-text-tertiary)] text-xs font-bold uppercase"><Clock className="w-4 h-4" />{opp.deadline}</div>
@@ -217,10 +213,10 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
                 <div className="max-w-7xl mx-auto px-8 md:px-12 mt-10 space-y-4">
                   <span className="bg-[var(--theme-bg-accent)] text-white px-5 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest inline-block">{selectedOpp.type}</span>
-                  <h1 className="text-4xl md:text-6xl font-black tracking-tighter">{selectedOpp.title}</h1>
+                  <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-[var(--theme-text-primary)]">{selectedOpp.title}</h1>
                 </div>
 
-                {/* GRILLE 50/50 POUR ÉLARGIR LES ACTIONS ET SUPPRIMER L'UNBOXING */}
+                {/* GRILLE 50/50 - ACTIONS ÉLARGIES ET SANS BOX (UNBOXING) */}
                 <div className="max-w-7xl mx-auto px-8 md:px-12 mt-12 grid grid-cols-1 lg:grid-cols-2 gap-16">
                   <div className="space-y-10">
                     <div className="prose prose-invert text-[var(--theme-text-secondary)] text-xl leading-relaxed max-w-none">
@@ -240,7 +236,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                           const message = `Je suis intéressé par "${selectedOpp.title}" de ${selectedOpp.organization}. Aide-moi à postuler.`;
                           if (chatAreaProps.onSendMessage) { chatAreaProps.onSendMessage(message); setActiveTab('chat'); }
                         }}
-                        className="w-full bg-transparent border-4 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-8 rounded-[2.5rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-4 group text-2xl uppercase tracking-tighter"
+                        className="w-full bg-transparent border-4 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-8 rounded-[2.5rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-4 group text-2xl uppercase tracking-tighter shadow-lg"
                       >
                         PRÉPARER AVEC L'IA <Sparkles className="w-8 h-8 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
@@ -253,7 +249,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
         </div>
       </div>
 
-      <footer className="md:hidden h-16"></footer> {/* ESPACE POUR LA NAV MOBILE */}
+      {/* FOOTER VIDE */}
+      <footer className="md:hidden h-14 bg-[var(--theme-bg-secondary)] border-t border-[var(--theme-border-primary)]"></footer>
     </div>
   );
 };
