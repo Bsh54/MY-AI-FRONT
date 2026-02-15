@@ -314,7 +314,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                     <div key={opp.id} className="bg-[var(--theme-bg-secondary)] p-5 rounded-2xl border border-[var(--theme-border-primary)] flex items-center justify-between group hover:border-[var(--theme-bg-accent)]/50 transition-all shadow-sm">
                       <div className="flex items-center gap-6">
                         <div className="w-14 h-14 rounded-xl overflow-hidden shadow-md shrink-0 border border-[var(--theme-border-primary)]">
-                          <img src={opp.image} className="w-full h-full object-cover" alt="" />
+                          <img src={opp.image} alt={opp.title} className="w-full h-full object-cover" alt="" />
                         </div>
                         <div>
                           <h4 className="font-bold text-lg leading-tight mb-1 text-[var(--theme-text-primary)]">{opp.title}</h4>
