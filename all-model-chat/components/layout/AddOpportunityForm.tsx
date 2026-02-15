@@ -327,7 +327,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                       </div>
 
                       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                        <button onClick={() => startEdit(opp)} className="p-3 bg-[var(--theme-bg-tertiary)] text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all shadow-sm">
+                        <button aria-label="Modifier l opportunity" onClick={() => startEdit(opp)} className="p-3 bg-[var(--theme-bg-tertiary)] text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all shadow-sm">
                           <Edit3 className="w-5 h-5" />
                         </button>
                         <button onClick={() => handleDelete(opp.id)} className="p-3 bg-[var(--theme-bg-tertiary)] text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm">
