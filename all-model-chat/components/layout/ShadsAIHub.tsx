@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   Sparkles,
   Clock,
+  Plus
 } from 'lucide-react';
 
 // Imports des composants originaux
@@ -15,6 +16,7 @@ import { HistorySidebar } from '../sidebar/HistorySidebar';
 import { ChatArea } from './ChatArea';
 import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
+import { AddOpportunityForm } from './AddOpportunityForm';
 
 interface ShadsAIHubProps {
   sidebarProps: any;
@@ -38,6 +40,7 @@ interface Opportunity {
   deadline: string;
   location: string;
   image: string;
+  link?: string;
   status: 'Ouvert' | 'Bientôt fini' | 'Fermé';
   reward?: string;
   featured?: boolean;
@@ -101,11 +104,27 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [activeTab, setActiveTab] = useState<'chat' | 'opportunities'>('opportunities');
   const [selectedOpp, setSelectedOpp] = useState<Opportunity | null>(null);
   const [filterType, setFilterType] = useState<string>('Tous');
+  const [opportunities, setOpportunities] = useState<Opportunity[]>(OPPORTUNITIES_DATA);
+  const [isAdding, setIsAdding] = useState(false);
 
-  const otherOpps = OPPORTUNITIES_DATA.filter(o => filterType === 'Tous' || o.type === filterType);
+  const otherOpps = opportunities.filter(o => filterType === 'Tous' || o.type === filterType);
 
   return (
     <div className={`flex flex-col h-full w-full overflow-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] transition-colors duration-300 relative`}>
+
+      {/* MOBILE HEADER */}
+      <header className="flex md:hidden items-center justify-between px-4 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100]">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-[var(--theme-bg-accent)]" />
+          <span className="font-black text-sm uppercase tracking-tighter">ShadsAI</span>
+        </div>
+        <button
+          onClick={() => setIsAdding(true)}
+          className="bg-[var(--theme-bg-accent)] text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest"
+        >
+          <Plus className="w-3 h-3 inline mr-1" /> AJOUTER
+        </button>
+      </header>
 
       {/* HEADER DESKTOP */}
       <header className="hidden md:flex items-center justify-between px-6 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100] shadow-sm">
@@ -130,10 +149,33 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
             <MessageSquare className="w-4 h-4" /> ASSISTANT
           </button>
         </nav>
-        <div className="w-32"></div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setIsAdding(true)}
+            className="flex items-center gap-2 bg-[var(--theme-bg-accent)] text-white px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg active:scale-95"
+          >
+            <Plus className="w-4 h-4" /> AJOUTER
+          </button>
+          <div className="w-8 h-8 rounded-full bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] overflow-hidden">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-full h-full object-cover" />
+          </div>
+        </div>
       </header>
 
       <div className="flex-1 relative overflow-hidden">
+        {/* Formulaire d'ajout (Overlay) */}
+        {isAdding && (
+          <div className="absolute inset-0 z-[300] bg-[var(--theme-bg-primary)]">
+            <AddOpportunityForm
+              onClose={() => setIsAdding(false)}
+              onAdd={(newOpp) => {
+                setOpportunities([newOpp, ...opportunities]);
+                setIsAdding(false);
+              }}
+            />
+          </div>
+        )}
+
         {/* Contenu principal */}
         <div className={`absolute inset-0 flex pb-16 md:pb-0 ${activeTab === 'chat' ? 'flex z-10' : 'hidden'}`}>
           {isHistorySidebarOpen && <div onClick={() => setIsHistorySidebarOpen(false)} className="fixed inset-0 bg-black/60 z-40 md:hidden" />}
@@ -184,8 +226,10 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
               </>
             ) : (
               <div className="animate-in slide-in-from-right duration-700 pb-20">
-                <div className="relative h-[40vh] md:h-[55vh] w-full overflow-hidden rounded-b-[3rem] shadow-xl">
-                  <img src={selectedOpp.image} className="w-full h-full object-cover" />
+                <div className="relative h-[45vh] md:h-[65vh] w-full overflow-hidden rounded-b-[4rem] shadow-2xl">
+                  <img src={selectedOpp.image} className="w-full h-full object-cover scale-105" />
+                  {/* Overlay dégradé pour la profondeur */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
                   <div className="absolute top-8 left-8">
                     <button onClick={() => setSelectedOpp(null)} className="group flex items-center gap-3 bg-black/40 backdrop-blur-xl border border-white/10 px-5 py-2.5 rounded-2xl text-white hover:bg-[var(--theme-bg-accent)] transition-all font-bold uppercase text-[10px] tracking-[0.2em]">
                       <ChevronLeft className="w-4 h-4" /> RETOUR
@@ -225,13 +269,35 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                   <div className="lg:col-span-1">
                     {/* PC: Reste centré et fixe au scroll dans sa colonne | Mobile: Suit le flux du texte */}
                     <div className="lg:sticky lg:top-[35vh] space-y-4 w-full max-w-sm mx-auto lg:ml-auto mt-12 lg:mt-0">
-                      <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight">
+                      <button
+                        onClick={() => {
+                          if (selectedOpp.link) {
+                            window.open(selectedOpp.link, '_blank');
+                          }
+                        }}
+                        className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight"
+                      >
                         POSTULER MAINTENANT <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
                       </button>
                       <button
                         onClick={() => {
-                          const message = `Je suis intéressé par "${selectedOpp.title}" de ${selectedOpp.organization}. Aide-moi à postuler.`;
-                          if (chatAreaProps.onSendMessage) { chatAreaProps.onSendMessage(message); setActiveTab('chat'); }
+                          const detailedPrompt = `Bonjour ! Je souhaite postuler à l'opportunité suivante :
+
+📌 **TITRE** : ${selectedOpp.title}
+🏢 **ORGANISATION** : ${selectedOpp.organization}
+📅 **DATE LIMITE** : ${selectedOpp.deadline}
+
+**DÉTAILS DE L'ANNONCE :**
+${selectedOpp.fullContent}
+
+Peux-tu m'aider à préparer ma candidature (CV, lettre de motivation, conseils pour l'entretien) spécifiquement pour cette offre ?`;
+
+                          if (chatAreaProps.onSendMessage) {
+                            // On déclenche un nouveau chat via les props si disponible
+                            if (chatAreaProps.onNewChat) chatAreaProps.onNewChat();
+                            chatAreaProps.onSendMessage(detailedPrompt);
+                            setActiveTab('chat');
+                          }
                         }}
                         className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
                       >
