@@ -345,3 +345,4 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
     </div>
   );
 };
+// Button styles constants
