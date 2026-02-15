@@ -28,6 +28,10 @@ interface AddOpportunityFormProps {
   onAdd: (allOpportunities: Opportunity[]) => void;
 }
 
+/**
+ * Composant principal de gestion des opportunités (Dashboard Admin).
+ * Permet la création, modification et suppression.
+ */
 export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose, onAdd }) => {
   const [adminTab, setAdminTab] = useState<'create' | 'manage'>('create');
   const [editingId, setEditingId] = useState<string | null>(null);
