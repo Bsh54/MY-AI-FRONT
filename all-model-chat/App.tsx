@@ -4,6 +4,7 @@ import { useAppLogic } from './hooks/app/useAppLogic';
 import { useAppProps } from './hooks/app/useAppProps';
 import { WindowProvider } from './contexts/WindowContext';
 import ShadsAIHub from './components/layout/ShadsAIHub';
+import { AddOpportunityForm } from "./components/layout/AddOpportunityForm";
 
 const App: React.FC = () => {
   const logic = useAppLogic();
