@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   X,
   Upload,
@@ -14,7 +14,9 @@ import {
   Trash2,
   Edit3,
   Settings2,
-  LayoutGrid
+  LayoutGrid,
+  Search,
+  Lock
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -29,6 +31,7 @@ interface AddOpportunityFormProps {
 export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose, onAdd }) => {
   const [adminTab, setAdminTab] = useState<'create' | 'manage'>('create');
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [formData, setFormData] = useState({
     type: 'Bourse' as const,
@@ -48,6 +51,16 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
     const saved = localStorage.getItem('custom_opportunities');
     return saved ? JSON.parse(saved) : [];
   });
+
+  // Liste complète filtrée
+  const filteredOpps = useMemo(() => {
+    const all = [...customOpps, ...OPPORTUNITIES_DATA.map(o => ({ ...o, isSystem: true }))];
+    if (!searchQuery) return all;
+    return all.filter(o =>
+      o.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      o.organization.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [customOpps, searchQuery]);
 
   const [isPreview, setIsPreview] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -85,6 +98,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
       reward: ''
     });
     setIsPreview(false);
+    setAdminTab('create');
   };
 
   const handleDelete = (id: string) => {
@@ -118,7 +132,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
             <div className="w-10 h-10 bg-[var(--theme-bg-accent)] rounded-xl flex items-center justify-center text-white shadow-lg">
               <Settings2 className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-black uppercase tracking-tighter hidden md:block">Admin Portal</h2>
+            <h2 className="text-xl font-black uppercase tracking-tighter hidden md:block">Admin Dashboard</h2>
           </div>
 
           <nav className="flex bg-[var(--theme-bg-tertiary)] rounded-xl p-1 border border-[var(--theme-border-primary)]">
@@ -132,7 +146,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
               onClick={() => { setAdminTab('manage'); setShowSuccess(false); }}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all ${adminTab === 'manage' ? 'bg-[var(--theme-bg-accent)] text-white shadow-md' : 'text-[var(--theme-text-tertiary)] hover:text-[var(--theme-text-primary)]'}`}
             >
-              <LayoutGrid className="w-3.5 h-3.5" /> Gestion ({customOpps.length})
+              <LayoutGrid className="w-3.5 h-3.5" /> Gestion ({filteredOpps.length})
             </button>
           </nav>
         </div>
@@ -147,7 +161,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
               {isPreview ? "Éditer" : "Aperçu"}
             </button>
           )}
-          <button onClick={onClose} className="p-2 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-all border border-transparent hover:border-red-500/20">
+          <button onClick={onClose} className="p-2 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-all">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -160,10 +174,10 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
               <CheckCircle className="w-16 h-16" />
             </div>
             <h3 className="text-5xl font-black uppercase tracking-tighter mb-6 text-[var(--theme-text-primary)]">
-              {editingId ? 'Modification Réussie !' : 'Publication Réussie !'}
+              {editingId ? 'Mise à jour Réussie !' : 'Publication Réussie !'}
             </h3>
             <p className="text-2xl text-[var(--theme-text-secondary)] font-medium max-w-xl opacity-90 mb-12">
-              L'opportunité a été enregistrée avec succès dans le système.
+              Vos modifications ont été enregistrées avec succès.
             </p>
             <div className="flex flex-col md:flex-row gap-4">
               <button
@@ -171,10 +185,13 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                 className="group flex items-center gap-4 bg-[var(--theme-bg-accent)] text-white px-10 py-5 rounded-[2rem] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-2xl"
               >
                 <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-500" />
-                Ajouter une autre
+                Nouveau Contenu
               </button>
-              <button onClick={onClose} className="px-10 py-5 rounded-[2rem] font-black uppercase tracking-widest border-2 border-[var(--theme-border-primary)] hover:bg-[var(--theme-bg-secondary)] transition-all">
-                Retour au Hub
+              <button
+                onClick={() => setAdminTab('manage')}
+                className="px-10 py-5 rounded-[2rem] font-black uppercase tracking-widest border-2 border-[var(--theme-border-primary)] hover:bg-[var(--theme-bg-secondary)] transition-all"
+              >
+                Gérer la liste
               </button>
             </div>
           </div>
@@ -185,14 +202,15 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                 <div className="md:col-span-2 space-y-4">
                   <label className={labelClass}>Image de couverture (URL)</label>
                   <input type="text" className={inputClass} placeholder="https://..." value={formData.image} onChange={e => setFormData({...formData, image: e.target.value})} required />
+                  {formData.image && <img src={formData.image} className="h-32 w-full object-cover rounded-xl mt-2 border border-[var(--theme-border-primary)]" alt="" />}
                 </div>
                 <div className="space-y-4">
                   <label className={labelClass}>Titre de l'opportunité</label>
-                  <input type="text" className={inputClass} placeholder="Ex: Bourse ShadsAI" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
+                  <input type="text" className={inputClass} placeholder="Titre de l'annonce" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required />
                 </div>
                 <div className="space-y-4">
                   <label className={labelClass}>Organisation</label>
-                  <input type="text" className={inputClass} placeholder="Ex: Google AI" value={formData.organization} onChange={e => setFormData({...formData, organization: e.target.value})} required />
+                  <input type="text" className={inputClass} placeholder="Nom de l'entreprise" value={formData.organization} onChange={e => setFormData({...formData, organization: e.target.value})} required />
                 </div>
                 <div className="space-y-4">
                   <label className={labelClass}>Type</label>
@@ -201,28 +219,28 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
                   </select>
                 </div>
                 <div className="space-y-4">
-                  <label className={labelClass}>Lien officiel</label>
+                  <label className={labelClass}>Lien Officiel</label>
                   <input type="text" className={inputClass} placeholder="https://..." value={formData.link} onChange={e => setFormData({...formData, link: e.target.value})} required />
                 </div>
                 <div className="space-y-4">
-                  <label className={labelClass}>Date limite</label>
+                  <label className={labelClass}>Date Limite</label>
                   <input type="text" className={inputClass} placeholder="Ex: 30 Juin 2026" value={formData.deadline} onChange={e => setFormData({...formData, deadline: e.target.value})} required />
                 </div>
                 <div className="space-y-4">
                   <label className={labelClass}>Lieu</label>
-                  <input type="text" className={inputClass} placeholder="Ex: Remote / Paris" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} required />
+                  <input type="text" className={inputClass} placeholder="Ex: Paris / Remote" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} required />
                 </div>
                 <div className="md:col-span-2 space-y-4">
-                  <label className={labelClass}>Contenu détaillé (Markdown)</label>
+                  <label className={labelClass}>Contenu Markdown</label>
                   <textarea className={`${inputClass} min-h-[300px] font-mono text-sm`} value={formData.fullContent} onChange={e => setFormData({...formData, fullContent: e.target.value})} required />
                 </div>
-                <button type="submit" className="md:col-span-2 w-full bg-[var(--theme-bg-accent)] text-white font-black py-5 rounded-2xl shadow-xl hover:scale-[1.02] transition-all uppercase tracking-widest">
-                  {editingId ? 'Mettre à jour' : 'Publier maintenant'}
+                <button type="submit" className="md:col-span-2 w-full bg-[var(--theme-bg-accent)] text-white font-black py-5 rounded-2xl shadow-xl hover:scale-[1.02] transition-all uppercase tracking-widest active:scale-95">
+                  {editingId ? 'Sauvegarder les modifications' : 'Publier l\'opportunité'}
                 </button>
               </form>
             ) : (
               <div className="max-w-4xl mx-auto space-y-12">
-                <div className="bg-[var(--theme-bg-secondary)] p-8 rounded-3xl border border-[var(--theme-border-primary)]">
+                <div className="bg-[var(--theme-bg-secondary)] p-8 rounded-3xl border border-[var(--theme-border-primary)] shadow-2xl">
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
                     h1: (props) => <h1 className="text-3xl font-black text-[var(--theme-text-primary)] mb-6 mt-8 uppercase border-b-2 border-[var(--theme-bg-accent)] pb-2" {...props} />,
                     h2: (props) => <h2 className="text-xl font-black text-[var(--theme-text-primary)] mb-4 mt-6 uppercase flex items-center gap-2 before:content-[''] before:w-1.5 before:h-6 before:bg-[var(--theme-bg-accent)] before:rounded-full" {...props} />,
@@ -239,36 +257,57 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
           </div>
         ) : (
           <div className="p-6 md:p-12 animate-in fade-in duration-500">
-            <div className="max-w-6xl mx-auto space-y-6">
+            <div className="max-w-5xl mx-auto space-y-8">
+              {/* Search Bar */}
+              <div className="relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--theme-text-tertiary)] group-focus-within:text-[var(--theme-bg-accent)] transition-colors" />
+                <input
+                  type="text"
+                  placeholder="Rechercher une opportunité..."
+                  className="w-full bg-[var(--theme-bg-secondary)] border border-[var(--theme-border-primary)] rounded-2xl pl-12 pr-4 py-4 text-[var(--theme-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)]/50 transition-all shadow-inner"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                />
+              </div>
+
+              {/* Opportunities List */}
               <div className="grid grid-cols-1 gap-4">
-                {customOpps.length === 0 ? (
+                {filteredOpps.length === 0 ? (
                   <div className="text-center py-20 bg-[var(--theme-bg-secondary)] rounded-3xl border-2 border-dashed border-[var(--theme-border-primary)]">
-                    <LayoutGrid className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                    <p className="text-[var(--theme-text-tertiary)] font-bold uppercase tracking-widest">Aucune opportunité personnalisée</p>
+                    <p className="text-[var(--theme-text-tertiary)] font-bold uppercase tracking-widest">Aucun résultat trouvé</p>
                   </div>
                 ) : (
-                  customOpps.map(opp => (
-                    <div key={opp.id} className="bg-[var(--theme-bg-secondary)] p-6 rounded-2xl border border-[var(--theme-border-primary)] flex items-center justify-between group hover:border-[var(--theme-bg-accent)]/50 transition-all">
+                  filteredOpps.map((opp: any) => (
+                    <div key={opp.id} className="bg-[var(--theme-bg-secondary)] p-5 rounded-2xl border border-[var(--theme-border-primary)] flex items-center justify-between group hover:border-[var(--theme-bg-accent)]/50 transition-all shadow-sm">
                       <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-xl overflow-hidden shadow-md">
+                        <div className="w-14 h-14 rounded-xl overflow-hidden shadow-md shrink-0 border border-[var(--theme-border-primary)]">
                           <img src={opp.image} className="w-full h-full object-cover" alt="" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-lg leading-tight mb-1">{opp.title}</h4>
-                          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-wider text-[var(--theme-text-tertiary)]">
+                          <h4 className="font-bold text-lg leading-tight mb-1 text-[var(--theme-text-primary)]">{opp.title}</h4>
+                          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-wider">
                             <span className="text-[var(--theme-bg-accent)]">{opp.type}</span>
-                            <span>•</span>
-                            <span>{opp.organization}</span>
+                            <span className="text-[var(--theme-text-tertiary)]">•</span>
+                            <span className="text-[var(--theme-text-tertiary)]">{opp.organization}</span>
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                        <button onClick={() => startEdit(opp)} className="p-3 bg-blue-500/10 text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all">
-                          <Edit3 className="w-5 h-5" />
-                        </button>
-                        <button onClick={() => handleDelete(opp.id)} className="p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all">
-                          <Trash2 className="w-5 h-5" />
-                        </button>
+
+                      <div className="flex items-center gap-2">
+                        {opp.isSystem ? (
+                          <div className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-bg-tertiary)] text-[var(--theme-text-tertiary)] rounded-xl text-[10px] font-black uppercase border border-[var(--theme-border-primary)] opacity-60">
+                            <Lock className="w-3.5 h-3.5" /> Lecture Seule
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                            <button onClick={() => startEdit(opp)} className="p-3 bg-[var(--theme-bg-tertiary)] text-blue-500 rounded-xl hover:bg-blue-500 hover:text-white transition-all shadow-sm">
+                              <Edit3 className="w-5 h-5" />
+                            </button>
+                            <button onClick={() => handleDelete(opp.id)} className="p-3 bg-[var(--theme-bg-tertiary)] text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))
