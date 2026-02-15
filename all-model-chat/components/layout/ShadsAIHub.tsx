@@ -198,8 +198,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                   <h1 className="text-2xl md:text-6xl font-black tracking-tighter text-[var(--theme-text-primary)] leading-tight">{selectedOpp.title}</h1>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
-                  <div className="space-y-8">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
+                  <div className="space-y-8 lg:col-span-2">
                     <div className="text-[var(--theme-text-secondary)] max-w-none">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
@@ -223,7 +223,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                     </div>
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="space-y-6 flex flex-col items-end justify-center">
                     <div className="sticky top-[40vh] space-y-4 w-full max-w-sm ml-auto transform -translate-y-1/2 md:translate-y-0">
                       <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-2xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight">
                         POSTULER MAINTENANT <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
