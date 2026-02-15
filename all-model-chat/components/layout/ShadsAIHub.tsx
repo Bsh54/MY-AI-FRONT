@@ -200,8 +200,14 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
 
                 <div className="max-w-7xl mx-auto px-6 md:px-12 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
                   <div className="space-y-8">
-                    <div className="prose prose-invert text-[var(--theme-text-secondary)] text-base md:text-xl leading-relaxed max-w-none">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <div className="text-[var(--theme-text-secondary)] max-w-none">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          h1: ({node, ...props}) => <h1 className="text-4xl font-black text-[var(--theme-text-primary)] mb-8 mt-12 tracking-tighter uppercase border-b-4 border-[var(--theme-bg-accent)] w-fit pb-2" {...props} />,
+                          h2: ({node, ...props}) => <h2 className="text-2xl font-black text-[var(--theme-text-primary)] mb-6 mt-10 tracking-tight uppercase flex items-center gap-3 before:content-[''] before:w-2 before:h-8 before:bg-[var(--theme-bg-accent)] before:rounded-full" {...props} />,
+                        }}
+                      >
                         {selectedOpp.fullContent}
                       </ReactMarkdown>
                     </div>
