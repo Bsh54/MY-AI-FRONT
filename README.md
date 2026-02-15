@@ -3,14 +3,14 @@
 <div align="center">
 
   <p>
-    <strong>Interface de Chat IA haute performance, optimisée pour Gemini 2.5 Flash via Cloudflare</strong>
+    <strong>Interface de Chat IA haute performance et Hub d'Opportunités Premium</strong>
   </p>
 
   <p>
     <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React">
     <img src="https://img.shields.io/badge/TypeScript-5.5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
     <img src="https://img.shields.io/badge/Tailwind-3.4-38BDB8?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind">
-    <img src="https://img.shields.io/badge/API-OpenAI_Format-FF6600?style=flat-square&logo=openai&logoColor=white" alt="OpenAI Format">
+    <img src="https://img.shields.io/badge/Admin-Portal-FF6600?style=flat-square&logo=speedtest&logoColor=white" alt="Admin Portal">
   </p>
 
 </div>
@@ -19,52 +19,27 @@
 
 ## 📖 Présentation
 
-**My AI Front** est une version personnalisée et optimisée de My AI Front, spécifiquement verrouillée pour fonctionner avec un modèle unique : **Gemini 2.5 Flash**.
+**My AI Front** est une plateforme évoluée combinant un moteur de chat IA ultra-rapide (Gemini 2.5 Flash) et un écosystème de gestion d'opportunités (Bourses, Concours, Stages).
 
-Cette version a été restructurée pour communiquer directement avec un point d'accès **Cloudflare Worker** au format OpenAI, offrant une interface légère, rapide et sans configuration manuelle nécessaire pour l'utilisateur final.
-
----
-
-## ✨ Caractéristiques Spéciales (Édition ShadsAI)
-
-*   🧠 **Modèle Unique :** Verrouillage strict sur `gemini-2.5-flash` pour une expérience cohérente.
-*   ⚡ **Architecture Cloudflare :** Requêtes acheminées via `shadsai1api.shadobsh.workers.dev`.
-*   🔄 **Compatibilité OpenAI :** Moteur de chat réécrit pour utiliser le format `/v1/chat/completions`.
-*   🖼️ **Support Multimodal :** Analyse d'images nativement intégrée via conversion Base64 automatique.
-*   💭 **Reasoning (Pensées) :** Support du flux de réflexion du modèle (`reasoning_content`) affiché en temps réel.
-*   🔐 **Zéro Configuration :** Clé API et Endpoint pré-configurés en dur pour un usage immédiat.
+Cette version intègre désormais un **CMS complet** (Content Management System) permettant d'administrer du contenu riche en temps réel sans configuration technique complexe.
 
 ---
 
-## 🚀 Démarrage Rapide
+## ✨ Nouvelles Caractéristiques (Édition Hub & Admin)
 
-### 1. Installation
-```bash
-# Cloner le dépôt
-git clone https://github.com/Bsh54/My-AI-Front-.git
-cd My-AI-Front-/my-ai-front
-
-# Installer les dépendances
-npm install
-```
-
-### 2. Lancement
-```bash
-# Lancer le serveur de développement
-npm run dev
-```
-Accédez ensuite à `http://localhost:5173` dans votre navigateur.
+*   🧭 **Explorer Hub** : Un dashboard élégant pour découvrir des opportunités avec recherche instantanée et filtrage par catégories.
+*   👑 **Opportunités Élite** : Système de mise en avant (Featured) avec badges animés et tri prioritaire.
+*   🛠️ **Portail Admin (`/admin-portal`)** : Interface de gestion isolée permettant d'ajouter, modifier ou supprimer des annonces.
+*   📝 **Éditeur Markdown** : Support du texte riche pour des descriptions professionnelles et structurées.
+*   🚀 **Redirection Directe** : Système de redirection robuste vers les liens de candidature officiels.
+*   🧠 **Assistant IA Contextuel** : Bouton de préparation assistée par IA qui injecte automatiquement les détails de l'annonce dans le chat.
 
 ---
 
-## 📁 Documentation Interne
+## 🚀 Routes de l'Application
 
-Pour vous aider à personnaliser l'interface, plusieurs guides détaillés sont disponibles à la racine du dossier `my-ai-front` :
-
-*   [PROJECT_GUIDE.md](./my-ai-front/PROJECT_GUIDE.md) : Vue d'ensemble pour débuter.
-*   [VISUAL_CUSTOMIZATION_MASTER.md](./my-ai-front/VISUAL_CUSTOMIZATION_MASTER.md) : Guide ultime pour changer les couleurs et le style.
-*   [UI_COMPONENT_MAP.md](./my-ai-front/UI_COMPONENT_MAP.md) : Carte visuelle pour trouver quel fichier modifie quel bouton.
-*   [TECHNICAL_ARCHITECTURE.md](./my-ai-front/TECHNICAL_ARCHITECTURE.md) : Analyse du flux de données.
+*   🏠 **Accueil / Hub** : `http://localhost:5173/` - Exploration et Chat IA.
+*   ⚙️ **Portail Admin** : `http://localhost:5173/admin-portal` - Gestion du contenu.
 
 ---
 
@@ -72,9 +47,9 @@ Pour vous aider à personnaliser l'interface, plusieurs guides détaillés sont 
 
 *   **Frontend :** React 18 + Vite
 *   **Style :** Tailwind CSS + Lucide Icons
-*   **Rendu :** React-Markdown + KaTeX (Maths) + Mermaid (Diagrammes)
-*   **Persistance :** IndexedDB (via Dexie.js) pour l'historique local.
-*   **Réseau :** Fetch API avec streaming SSE (Server-Sent Events).
+*   **Rendu :** React-Markdown + Remark-GFM (Formatage riche)
+*   **Persistance :** LocalStorage (Master List) + IndexedDB (Historique Chat)
+*   **Réseau :** Fetch API avec streaming SSE via Cloudflare Workers.
 
 ---
 
