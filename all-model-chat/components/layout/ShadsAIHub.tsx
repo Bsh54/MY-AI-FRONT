@@ -201,9 +201,9 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                 <div className="max-w-7xl mx-auto px-6 md:px-12 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
                   <div className="space-y-8">
                     <div className="prose prose-invert text-[var(--theme-text-secondary)] text-base md:text-xl leading-relaxed max-w-none">
-                      <div className="space-y-6 text-sm md:text-lg font-medium opacity-90">
-                        {selectedOpp.fullContent.split('\n').map((line, i) => <p key={i}>{line}</p>)}
-                      </div>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {selectedOpp.fullContent}
+                      </ReactMarkdown>
                     </div>
                   </div>
 
