@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   MessageSquare,
   Lightbulb,
@@ -198,45 +198,28 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                   <h1 className="text-2xl md:text-6xl font-black tracking-tighter text-[var(--theme-text-primary)] leading-tight">{selectedOpp.title}</h1>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
-                  <div className="space-y-8 lg:col-span-2">
-                    <div className="text-[var(--theme-text-secondary)] max-w-none">
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={{
-                          h1: ({node, ...props}) => <h1 className="text-4xl font-black text-[var(--theme-text-primary)] mb-8 mt-12 tracking-tighter uppercase border-b-4 border-[var(--theme-bg-accent)] w-fit pb-2" {...props} />,
-                          h2: ({node, ...props}) => <h2 className="text-2xl font-black text-[var(--theme-text-primary)] mb-6 mt-10 tracking-tight uppercase flex items-center gap-3 before:content-[''] before:w-2 before:h-8 before:bg-[var(--theme-bg-accent)] before:rounded-full" {...props} />,
-                          h3: ({node, ...props}) => <h3 className="text-xl font-bold text-[var(--theme-text-primary)] mb-4 mt-8" {...props} />,
-                          p: ({node, ...props}) => <p className="text-lg md:text-xl leading-relaxed mb-6 opacity-90 font-medium" {...props} />,
-                          strong: ({node, ...props}) => <strong className="text-[var(--theme-bg-accent)] font-black px-1.5 py-0.5 bg-[var(--theme-bg-accent)]/10 rounded-md" {...props} />,
-                          ul: ({node, ...props}) => <ul className="space-y-4 mb-8 ml-4" {...props} />,
-                          li: ({node, ...props}) => (
-                            <li className="flex items-start gap-3 text-lg md:text-xl">
-                              <span className="mt-2.5 w-2 h-2 rounded-full bg-[var(--theme-bg-accent)] shrink-0" />
-                              <span {...props} />
-                            </li>
-                          ),
-                          blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-[var(--theme-border-primary)] pl-6 italic my-8 text-2xl font-light opacity-80" {...props} />,
-                        }}
-                      >
-                        {selectedOpp.fullContent}
-                      </ReactMarkdown>
+                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  <div className="space-y-8">
+                    <div className="prose prose-invert text-[var(--theme-text-secondary)] text-base md:text-xl leading-relaxed max-w-none">
+                      <div className="space-y-6 text-sm md:text-lg font-medium opacity-90">
+                        {selectedOpp.fullContent.split('\n').map((line, i) => <p key={i}>{line}</p>)}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="space-y-6 flex flex-col items-end justify-center">
-                    <div className="sticky top-[40vh] space-y-4 w-full max-w-sm ml-auto transform -translate-y-1/2 md:translate-y-0">
-                      <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight">
-                        POSTULER MAINTENANT <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                  <div className="space-y-6">
+                    <div className="sticky top-[25vh] space-y-4 md:space-y-6">
+                      <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-4 md:py-8 rounded-2xl md:rounded-[2.5rem] shadow-2xl transition-all flex items-center justify-center gap-3 md:gap-4 group active:scale-95 text-lg md:text-2xl uppercase tracking-tighter">
+                        POSTULER MAINTENANT <ArrowRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-2 transition-transform" />
                       </button>
                       <button
                         onClick={() => {
                           const message = `Je suis intéressé par "${selectedOpp.title}" de ${selectedOpp.organization}. Aide-moi à postuler.`;
                           if (chatAreaProps.onSendMessage) { chatAreaProps.onSendMessage(message); setActiveTab('chat'); }
                         }}
-                        className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
+                        className="w-full bg-transparent border-2 md:border-4 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-4 md:py-8 rounded-2xl md:rounded-[2.5rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 md:gap-4 group text-lg md:text-2xl uppercase tracking-tighter"
                       >
-                        PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
+                        PRÉPARER AVEC L'IA <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-[var(--theme-bg-accent)] group-hover:text-white" />
                       </button>
                     </div>
                   </div>
