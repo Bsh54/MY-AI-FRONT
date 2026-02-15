@@ -198,7 +198,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                   <h1 className="text-2xl md:text-6xl font-black tracking-tighter text-[var(--theme-text-primary)] leading-tight">{selectedOpp.title}</h1>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-16 pb-40 md:pb-0">
                   <div className="space-y-8 lg:col-span-2">
                     <div className="text-[var(--theme-text-secondary)] max-w-none">
                       <ReactMarkdown
@@ -223,20 +223,22 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                     </div>
                   </div>
 
-                  <div className="space-y-6 flex flex-col items-end justify-center">
-                    <div className="sticky top-[40vh] space-y-4 w-full max-w-sm ml-auto transform -translate-y-1/2 md:translate-y-0">
-                      <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-2xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight">
-                        POSTULER MAINTENANT <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const message = `Je suis intéressé par "${selectedOpp.title}" de ${selectedOpp.organization}. Aide-moi à postuler.`;
-                          if (chatAreaProps.onSendMessage) { chatAreaProps.onSendMessage(message); setActiveTab('chat'); }
-                        }}
-                        className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
-                      >
-                        PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
-                      </button>
+                  <div className="lg:col-span-1">
+                    <div className="fixed bottom-16 left-0 right-0 p-4 bg-[var(--theme-bg-secondary)]/90 backdrop-blur-xl border-t border-[var(--theme-border-primary)] flex flex-col gap-3 z-[100] lg:relative lg:bottom-0 lg:p-0 lg:bg-transparent lg:border-0 lg:sticky lg:top-[40vh] lg:transform lg:-translate-y-1/2">
+                      <div className="w-full max-w-sm mx-auto lg:ml-auto space-y-3 lg:space-y-4">
+                        <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-2xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight">
+                          POSTULER MAINTENANT <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            const message = `Je suis intéressé par "${selectedOpp.title}" de ${selectedOpp.organization}. Aide-moi à postuler.`;
+                            if (chatAreaProps.onSendMessage) { chatAreaProps.onSendMessage(message); setActiveTab('chat'); }
+                          }}
+                          className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
+                        >
+                          PRÉPARER AVEC L'IA <Sparkles className="w-5 h-5 md:w-6 h-6 text-[var(--theme-bg-accent)] group-hover:text-white" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
