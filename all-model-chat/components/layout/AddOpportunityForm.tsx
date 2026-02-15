@@ -36,6 +36,7 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
   });
 
   const [isPreview, setIsPreview] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +44,27 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
       ...formData,
       id: Date.now().toString(),
     });
+
+    setShowSuccess(true);
+
+    // Réinitialisation après 3 secondes pour permettre un nouvel ajout
+    setTimeout(() => {
+      setShowSuccess(false);
+      setFormData({
+        type: 'Bourse' as const,
+        title: '',
+        organization: '',
+        description: '',
+        fullContent: '',
+        deadline: '',
+        location: '',
+        image: '',
+        link: '',
+        status: 'Ouvert' as const,
+        reward: ''
+      });
+      setIsPreview(false);
+    }, 3500);
   };
 
   const inputClass = "w-full bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] rounded-xl px-4 py-3 text-[var(--theme-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-bg-accent)] transition-all";
@@ -75,7 +97,23 @@ export const AddOpportunityForm: React.FC<AddOpportunityFormProps> = ({ onClose,
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 md:p-12">
+      <div className="flex-1 overflow-y-auto p-6 md:p-12 relative">
+        {/* Animation de Succès "Luxe" */}
+        {showSuccess && (
+          <div className="absolute inset-0 z-[500] bg-[var(--theme-bg-primary)] flex flex-col items-center justify-center text-center p-6 animate-in fade-in duration-500">
+            <div className="w-24 h-24 bg-[var(--theme-bg-accent)] rounded-full flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(var(--theme-bg-accent-rgb),0.3)] animate-bounce">
+              <CheckCircle className="w-12 h-12 text-white" />
+            </div>
+            <h3 className="text-4xl font-black uppercase tracking-tighter mb-4 animate-in slide-in-from-bottom-4 duration-700 delay-100">Publication Réussie !</h3>
+            <p className="text-xl text-[var(--theme-text-secondary)] font-medium max-w-md opacity-80 animate-in slide-in-from-bottom-4 duration-700 delay-200">
+              Votre opportunité est maintenant en ligne et visible par tous les utilisateurs du Hub.
+            </p>
+            <div className="mt-12 flex items-center gap-2 text-[var(--theme-text-tertiary)] text-xs font-black uppercase tracking-widest animate-pulse">
+              <Clock className="w-4 h-4" /> Réinitialisation du formulaire...
+            </div>
+          </div>
+        )}
+
         {!isPreview ? (
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Section Image */}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   MessageSquare,
   Lightbulb,
@@ -8,7 +8,6 @@ import {
   ChevronLeft,
   Sparkles,
   Clock,
-  Plus
 } from 'lucide-react';
 
 // Imports des composants originaux
@@ -16,11 +15,6 @@ import { HistorySidebar } from '../sidebar/HistorySidebar';
 import { ChatArea } from './ChatArea';
 import { AppModals } from '../modals/AppModals';
 import { SidePanel } from './SidePanel';
-import { AddOpportunityForm } from './AddOpportunityForm';
-
-// Types et Données externalisés
-import { Opportunity } from '../../types/opportunity';
-import { OPPORTUNITIES_DATA } from '../../constants/opportunities';
 
 interface ShadsAIHubProps {
   sidebarProps: any;
@@ -33,6 +27,64 @@ interface ShadsAIHubProps {
   themeId: string;
   currentTheme: any;
 }
+
+interface Opportunity {
+  id: string;
+  type: 'Bourse' | 'Concours' | 'Stage' | 'Conférence' | 'Mentorat';
+  title: string;
+  organization: string;
+  description: string;
+  fullContent: string;
+  deadline: string;
+  location: string;
+  image: string;
+  status: 'Ouvert' | 'Bientôt fini' | 'Fermé';
+  reward?: string;
+  featured?: boolean;
+}
+
+const OPPORTUNITIES_DATA: Opportunity[] = [
+  {
+    id: 'hero-1',
+    type: 'Bourse',
+    title: 'Bourse ShadsAI - Excellence en IA Générative',
+    organization: 'ShadsAI Foundation',
+    description: 'Une opportunité unique de financer vos études et de rejoindre notre programme d\'incubation exclusif.',
+    fullContent: 'La bourse ShadsAI est notre programme phare pour l\'année 2026. Elle a été conçue pour identifier et soutenir les esprits les plus brillants dans le domaine de l\'intelligence artificielle générative.\n\n**Objectifs du Programme :**\nL\'objectif principal est de lever les barrières financières pour les étudiants talentueux tout en leur offrant un environnement technique de pointe.\n\n**Détails de la Récompense :**\n- Une bourse d\'études de 15 000€ versée en deux fois.\n- Un accès prioritaire à nos serveurs de calcul haute performance (H100/A100).\n\n**Critères d\'Éligibilité :**\n- Être inscrit dans un cursus de Master 2 ou de Doctorat (PhD).\n- Avoir un projet de recherche lié aux LLMs.\n\n**Processus de Candidature :**\nSoumettez un dossier complet incluant un CV académique et une lettre de motivation.',
+    deadline: '30 Avril 2026',
+    location: 'Global / Remote',
+    image: 'https://images.unsplash.com/photo-1620712943543-bcc4628c6bb5?auto=format&fit=crop&q=80&w=1200',
+    status: 'Ouvert',
+    reward: '15,000 €',
+    featured: true
+  },
+  {
+    id: '1',
+    type: 'Concours',
+    title: 'Deepfake Detection Challenge',
+    organization: 'Meta AI Research',
+    description: 'Créez les meilleurs algorithmes pour détecter les médias générés par IA.',
+    fullContent: 'Face à la montée en puissance des outils de génération d\'images et de vidéos, la détection des contenus synthétiques est devenue un enjeu majeur pour la sécurité de l\'information.\n\n**Le Défi Technique :**\nConcevoir un modèle capable d\'identifier des manipulations extrêmement subtiles dans des flux vidéo haute définition.\n\n**Récompenses :**\nLe grand gagnant recevra une dotation financière et une proposition d\'incubation.',
+    deadline: '15 Mars 2026',
+    location: 'En ligne',
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800',
+    status: 'Ouvert',
+    reward: 'Place en incubation'
+  },
+  {
+    id: '2',
+    type: 'Mentorat',
+    title: 'Programme "Alpha Founders" IA',
+    organization: 'Y Combinator (Section IA)',
+    description: '8 semaines de mentorat intensif pour transformer votre idée de startup IA en réalité.',
+    fullContent: 'Le programme Alpha Founders est une initiative exclusive de Y Combinator dédiée spécifiquement aux startups qui placent l\'IA au cœur de leur proposition de valeur.\n\n**Ce que vous allez bâtir :**\n- Une stratégie de Go-to-Market robuste.\n- Un modèle économique viable.\n\n**Critères :**\nNous recherchons des équipes fondatrices ayant déjà un prototype fonctionnel.',
+    deadline: '05 Mars 2026',
+    location: 'San Francisco / Hybrid',
+    image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800',
+    status: 'Bientôt fini',
+    reward: 'Accompagnement Expert'
+  }
+];
 
 const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const {
@@ -49,24 +101,11 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
   const [activeTab, setActiveTab] = useState<'chat' | 'opportunities'>('opportunities');
   const [selectedOpp, setSelectedOpp] = useState<Opportunity | null>(null);
   const [filterType, setFilterType] = useState<string>('Tous');
-  const [opportunities, setOpportunities] = useState<Opportunity[]>(() => {
-    const saved = localStorage.getItem('custom_opportunities');
-    const custom = saved ? JSON.parse(saved) : [];
-    return [...custom, ...OPPORTUNITIES_DATA];
-  });
 
-  const otherOpps = opportunities.filter(o => filterType === 'Tous' || o.type === filterType);
+  const otherOpps = OPPORTUNITIES_DATA.filter(o => filterType === 'Tous' || o.type === filterType);
 
   return (
     <div className={`flex flex-col h-full w-full overflow-hidden bg-[var(--theme-bg-primary)] text-[var(--theme-text-primary)] transition-colors duration-300 relative`}>
-
-      {/* MOBILE HEADER */}
-      <header className="flex md:hidden items-center justify-between px-4 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100]">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-[var(--theme-text-accent)]" />
-          <span className="font-black text-sm uppercase tracking-tighter">ShadsAI Hub</span>
-        </div>
-      </header>
 
       {/* HEADER DESKTOP */}
       <header className="hidden md:flex items-center justify-between px-6 py-3 border-b border-[var(--theme-border-primary)] bg-[var(--theme-bg-secondary)] z-[100] shadow-sm">
@@ -91,11 +130,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
             <MessageSquare className="w-4 h-4" /> ASSISTANT
           </button>
         </nav>
-        <div className="flex items-center gap-4">
-          <div className="w-8 h-8 rounded-full bg-[var(--theme-bg-tertiary)] border border-[var(--theme-border-primary)] overflow-hidden">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" className="w-full h-full object-cover" />
-          </div>
-        </div>
+        <div className="w-32"></div>
       </header>
 
       <div className="flex-1 relative overflow-hidden">
@@ -149,34 +184,30 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
               </>
             ) : (
               <div className="animate-in slide-in-from-right duration-700 pb-20">
-                <div className="relative h-[45vh] md:h-[70vh] w-full overflow-hidden rounded-b-[5rem] shadow-2xl group/hero">
-                  <img
-                    src={selectedOpp.image}
-                    className="w-full h-full object-cover object-[50%_35%] scale-110 group-hover/hero:scale-[1.15] transition-transform duration-[2000ms] ease-out"
-                  />
-                  {/* Overlay dégradé multicouche pour un rendu cinéma */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent"></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--theme-bg-primary)] via-transparent to-transparent opacity-60"></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                  <div className="absolute top-8 left-8 z-10">
+                <div className="relative h-[40vh] md:h-[55vh] w-full overflow-hidden rounded-b-[3rem] shadow-xl">
+                  <img src={selectedOpp.image} className="w-full h-full object-cover" />
+                  <div className="absolute top-8 left-8">
                     <button onClick={() => setSelectedOpp(null)} className="group flex items-center gap-3 bg-black/40 backdrop-blur-xl border border-white/10 px-5 py-2.5 rounded-2xl text-white hover:bg-[var(--theme-bg-accent)] transition-all font-bold uppercase text-[10px] tracking-[0.2em]">
                       <ChevronLeft className="w-4 h-4" /> RETOUR
                     </button>
                   </div>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-16 relative">
-                  <div className="lg:col-span-2 space-y-12">
-                    <div className="space-y-6">
-                      <span className="bg-[var(--theme-bg-accent)] text-white px-4 py-1 rounded-full font-black text-[9px] uppercase tracking-widest inline-block shadow-lg">{selectedOpp.type}</span>
-                      <h1 className="text-2xl md:text-6xl font-black tracking-tighter text-[var(--theme-text-primary)] leading-tight">{selectedOpp.title}</h1>
-                    </div>
+                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-8 space-y-3">
+                  <span className="bg-[var(--theme-bg-accent)] text-white px-4 py-1 rounded-full font-black text-[9px] uppercase tracking-widest inline-block shadow-lg">{selectedOpp.type}</span>
+                  <h1 className="text-2xl md:text-6xl font-black tracking-tighter text-[var(--theme-text-primary)] leading-tight">{selectedOpp.title}</h1>
+                </div>
+
+                <div className="max-w-7xl mx-auto px-6 md:px-12 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
+                  <div className="space-y-8 lg:col-span-2">
                     <div className="text-[var(--theme-text-secondary)] max-w-none">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                           h1: ({node, ...props}) => <h1 className="text-4xl font-black text-[var(--theme-text-primary)] mb-8 mt-12 tracking-tighter uppercase border-b-4 border-[var(--theme-bg-accent)] w-fit pb-2" {...props} />,
                           h2: ({node, ...props}) => <h2 className="text-2xl font-black text-[var(--theme-text-primary)] mb-6 mt-10 tracking-tight uppercase flex items-center gap-3 before:content-[''] before:w-2 before:h-8 before:bg-[var(--theme-bg-accent)] before:rounded-full" {...props} />,
+                          h3: ({node, ...props}) => <h3 className="text-xl font-bold text-[var(--theme-text-primary)] mb-4 mt-8" {...props} />,
+                          p: ({node, ...props}) => <p className="text-lg md:text-xl leading-relaxed mb-6 opacity-90 font-medium" {...props} />,
                           strong: ({node, ...props}) => <strong className="text-[var(--theme-bg-accent)] font-black px-1.5 py-0.5 bg-[var(--theme-bg-accent)]/10 rounded-md" {...props} />,
                           ul: ({node, ...props}) => <ul className="space-y-4 mb-8 ml-4" {...props} />,
                           li: ({node, ...props}) => (
@@ -185,7 +216,6 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                               <span {...props} />
                             </li>
                           ),
-                          p: ({node, ...props}) => <p className="text-lg md:text-xl leading-relaxed mb-6 opacity-90 font-medium" {...props} />,
                           blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-[var(--theme-border-primary)] pl-6 italic my-8 text-2xl font-light opacity-80" {...props} />,
                         }}
                       >
@@ -194,42 +224,15 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                     </div>
                   </div>
 
-                  <div className="lg:col-span-1">
-                    {/* PC: Reste centré et fixe au scroll dans sa colonne | Mobile: Suit le flux du texte */}
-                    <div className="lg:sticky lg:top-[40%] space-y-4 w-full max-w-sm mx-auto lg:ml-auto mt-12 lg:mt-0 z-50">
-                      <button
-                        onClick={() => {
-                          if (selectedOpp.link) {
-                            // On s'assure que le lien commence par http pour éviter les erreurs de redirection locale
-                            const url = selectedOpp.link.startsWith('http') ? selectedOpp.link : `https://${selectedOpp.link}`;
-                            window.open(url, '_blank', 'noopener,noreferrer');
-                          }
-                        }}
-                        className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight"
-                      >
+                  <div className="space-y-6 flex flex-col items-end justify-center">
+                    <div className="sticky top-[40vh] space-y-4 w-full max-w-sm ml-auto transform -translate-y-1/2 md:translate-y-0">
+                      <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight">
                         POSTULER MAINTENANT <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
                       </button>
                       <button
                         onClick={() => {
-                          const detailedPrompt = `Bonjour ! Je souhaite préparer ma candidature pour l'opportunité suivante :
-
-📌 **${selectedOpp.title}** (${selectedOpp.organization})
-📅 Date limite : ${selectedOpp.deadline}
-
-Voici les détails de l'offre :
----
-${selectedOpp.fullContent}
----
-
-Peux-tu m'aider à rédiger un CV et une lettre de motivation percutante pour cette offre ? Donne-moi aussi 3 conseils clés pour réussir l'entretien.`;
-
-                          if (chatAreaProps.onSendMessage) {
-                            if (chatAreaProps.onNewChat) chatAreaProps.onNewChat();
-                            setTimeout(() => {
-                              chatAreaProps.onSendMessage(detailedPrompt);
-                              setActiveTab('chat');
-                            }, 100);
-                          }
+                          const message = `Je suis intéressé par "${selectedOpp.title}" de ${selectedOpp.organization}. Aide-moi à postuler.`;
+                          if (chatAreaProps.onSendMessage) { chatAreaProps.onSendMessage(message); setActiveTab('chat'); }
                         }}
                         className="w-full bg-transparent border-2 border-[var(--theme-border-secondary)] text-[var(--theme-text-primary)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] hover:bg-[var(--theme-bg-accent)] hover:border-[var(--theme-bg-accent)] hover:text-white transition-all flex items-center justify-center gap-3 group text-sm md:text-lg uppercase tracking-tight"
                       >

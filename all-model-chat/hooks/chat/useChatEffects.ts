@@ -55,6 +55,9 @@ export const useChatEffects = ({
     // This effect ensures that if the activeSessionId points to a session that doesn't exist in savedSessions
     // (e.g. deleted), we switch to another valid session or new chat.
     useEffect(() => {
+        // Ignorer la validation si on est sur le portail admin
+        if (window.location.pathname === '/admin-portal') return;
+
         // Only run this check if we have initialized (savedSessions length > 0) or if we strictly expect a session.
         if (activeSessionId && savedSessions.length > 0 && !savedSessions.find(s => s.id === activeSessionId)) {
             logService.warn(`Active session ${activeSessionId} is no longer available. Switching sessions.`);

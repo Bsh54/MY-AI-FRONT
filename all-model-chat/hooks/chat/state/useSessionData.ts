@@ -21,11 +21,14 @@ export const useSessionData = () => {
 
     // Sync active session ID to sessionStorage and URL history
     useEffect(() => {
+        // CRITICAL: Do not intercept URL if we are on the admin portal
+        if (window.location.pathname === '/admin-portal') return;
+
         if (activeSessionId) {
             try {
                 sessionStorage.setItem(ACTIVE_CHAT_SESSION_ID_KEY, activeSessionId);
             } catch (e) {}
-            
+
             const targetPath = `/chat/${activeSessionId}`;
             try {
                 if (window.location.pathname !== targetPath) {
@@ -42,7 +45,7 @@ export const useSessionData = () => {
             try {
                 sessionStorage.removeItem(ACTIVE_CHAT_SESSION_ID_KEY);
             } catch (e) {}
-            
+
             try {
                 if (window.location.pathname !== '/' && !window.location.pathname.startsWith('/chat/')) {
                      window.history.pushState({}, '', '/');
