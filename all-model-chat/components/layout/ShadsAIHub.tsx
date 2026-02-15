@@ -224,7 +224,7 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                   </div>
 
                   <div className="space-y-6">
-                    <div className="sticky top-[25vh] space-y-4 md:space-y-6">
+                    <div className="sticky top-[40vh] space-y-4 w-full max-w-sm ml-auto transform -translate-y-1/2 md:translate-y-0">
                       <button className="w-full bg-[var(--theme-bg-accent)] hover:bg-[var(--theme-bg-accent-hover)] text-[var(--theme-text-accent)] font-black py-3 md:py-5 rounded-xl md:rounded-[2rem] shadow-2xl transition-all flex items-center justify-center gap-3 group active:scale-95 text-sm md:text-lg uppercase tracking-tight">
                         POSTULER MAINTENANT <ArrowRight className="w-5 h-5 md:w-6 h-6 group-hover:translate-x-2 transition-transform" />
                       </button>
