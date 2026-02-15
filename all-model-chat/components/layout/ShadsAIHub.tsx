@@ -214,6 +214,8 @@ const ShadsAIHub: React.FC<ShadsAIHubProps> = (props) => {
                               <span {...props} />
                             </li>
                           ),
+                          p: ({node, ...props}) => <p className="text-lg md:text-xl leading-relaxed mb-6 opacity-90 font-medium" {...props} />,
+                          blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-[var(--theme-border-primary)] pl-6 italic my-8 text-2xl font-light opacity-80" {...props} />,
                         }}
                       >
                         {selectedOpp.fullContent}
