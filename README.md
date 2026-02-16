@@ -1,4 +1,4 @@
-# 🤖 EVOLUTICS (HACKBYIFRI 2026 Edition)
+#  EVOLUTICS (HACKBYIFRI 2026 Edition)
 
 <div align="center">
 
@@ -17,7 +17,7 @@
 
 ---
 
-## 📖 Présentation
+##  Présentation
 
 **My AI Front** est une plateforme évoluée combinant un moteur de chat IA ultra-rapide (Gemini 2.5 Flash) et un écosystème de gestion d'opportunités (Bourses, Concours, Stages).
 
@@ -25,25 +25,25 @@ Cette version intègre désormais un **CMS complet** (Content Management System)
 
 ---
 
-## ✨ Nouvelles Caractéristiques (Édition Hub & Admin)
+##  Nouvelles Caractéristiques (Édition Hub & Admin)
 
-*   🧭 **Explorer Hub** : Un dashboard élégant pour découvrir des opportunités avec recherche instantanée et filtrage par catégories.
-*   👑 **Opportunités Élite** : Système de mise en avant (Featured) avec badges animés et tri prioritaire.
-*   🛠️ **Portail Admin (`/admin-portal`)** : Interface de gestion isolée permettant d'ajouter, modifier ou supprimer des annonces.
-*   📝 **Éditeur Markdown** : Support du texte riche pour des descriptions professionnelles et structurées.
-*   🚀 **Redirection Directe** : Système de redirection robuste vers les liens de candidature officiels.
-*   🧠 **Assistant IA Contextuel** : Bouton de préparation assistée par IA qui injecte automatiquement les détails de l'annonce dans le chat.
-
----
-
-## 🚀 Routes de l'Application
-
-*   🏠 **Accueil / Hub** : `http://localhost:5173/` - Exploration et Chat IA.
-*   ⚙️ **Portail Admin** : `http://localhost:5173/admin-portal` - Gestion du contenu.
+*    **Explorer Hub** : Un dashboard élégant pour découvrir des opportunités avec recherche instantanée et filtrage par catégories.
+*    **Opportunités Élite** : Système de mise en avant (Featured) avec badges animés et tri prioritaire.
+*    **Portail Admin (`/admin-portal`)** : Interface de gestion isolée permettant d'ajouter, modifier ou supprimer des annonces.
+*    **Éditeur Markdown** : Support du texte riche pour des descriptions professionnelles et structurées.
+*    **Redirection Directe** : Système de redirection robuste vers les liens de candidature officiels.
+*    **Assistant IA Contextuel** : Bouton de préparation assistée par IA qui injecte automatiquement les détails de l'annonce dans le chat.
 
 ---
 
-## 🛠️ Stack Technique
+## Routes de l'Application
+
+*   **Accueil / Hub** : `http://localhost:5173/` - Exploration et Chat IA.
+*   **Portail Admin** : `http://localhost:5173/admin-portal` - Gestion du contenu.
+
+---
+
+##  Stack Technique
 
 *   **Frontend :** React 18 + Vite
 *   **Style :** Tailwind CSS + Lucide Icons
