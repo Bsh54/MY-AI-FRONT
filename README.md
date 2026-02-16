@@ -1,4 +1,4 @@
-# 🤖 My AI Front (ShadsAI Edition)
+# 🤖 EVOLUTICS (HACKBYIFRI 2026 Edition)
 
 <div align="center">
 
